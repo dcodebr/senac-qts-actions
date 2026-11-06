@@ -1,0 +1,28 @@
+name: .NET - NUnit Tests
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 10.0.x
+
+    - name: Restore dependencies
+      run: dotnet restore SeleniumDev/Senac.QTS.SeleniumDev.Test/Senac.QTS.SeleniumDev.Test.csproj
+
+    - name: Build
+      run: dotnet build SeleniumDev/Senac.QTS.SeleniumDev.Test/Senac.QTS.SeleniumDev.Test.csproj --no-restore
+
+    - name: Run NUnit Tests
+      run: dotnet test SeleniumDev/Senac.QTS.SeleniumDev.Test/Senac.QTS.SeleniumDev.Test.csproj --no-build --logger "console;verbosity=normal"
